@@ -3,26 +3,23 @@ class Inventory {
       this.items = [];
       this.onUpdate = null;
     }
-  
+  //For later 
     addItem(item) {
-      // Check if item already exists in inventory
       const existingItem = this.items.find(i => i.id === item.id);
       
       if (existingItem) {
-        // If the item allows stacking, increase quantity
         if (item.stackable) {
           existingItem.quantity += item.quantity || 1;
         }
-        // Otherwise ignore duplicate items
       } else {
-        // Set default quantity if not provided
+  
         if (!item.hasOwnProperty('quantity')) {
           item.quantity = 1;
         }
         this.items.push(item);
       }
   
-      // Trigger update callback if defined
+
       if (this.onUpdate) {
         this.onUpdate();
       }
@@ -36,7 +33,7 @@ class Inventory {
       if (itemIndex > -1) {
         this.items.splice(itemIndex, 1);
         
-        // Trigger update callback if defined
+
         if (this.onUpdate) {
           this.onUpdate();
         }
@@ -65,5 +62,5 @@ class Inventory {
     }
   }
   
-  // Create a global inventory instance
+
   window.playerInventory = new Inventory();

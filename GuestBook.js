@@ -1,14 +1,15 @@
 class GuestBook {
   constructor() {
     // Our hash map of guest entries
+    //Extra ghosts
     this.entries = {
-      "Eleanor Wright": {
+      "Sugar Wright": {
         room: 204,
         description: "bakes lemon cake",
         yearVisited: 1923,
         disappeared: false
       },
-      "Thomas Fleming": {
+      "Jack Fleming": {
         room: 112,
         description: "carries a golden pocket watch",
         yearVisited: 1931,
@@ -32,10 +33,9 @@ class GuestBook {
         yearVisited: 1919,
         disappeared: false
       },
-      // Adding your requested ghosts
       "Elliot": {
         room: 118,
-        description: "carries a golden pocket watch", // Based on init.js
+        description: "carries a golden pocket watch", 
         yearVisited: 1925,
         disappeared: false
       },
@@ -65,16 +65,12 @@ class GuestBook {
       }
     };
     
-    // A helper reverse lookup to find names by description
     this.descriptionIndex = {};
     
-    // Build the reverse index
     this.buildDescriptionIndex();
   }
   
   buildDescriptionIndex() {
-    // Create a reverse lookup from description -> name
-    // This demonstrates the concept of an index for faster lookups
     Object.keys(this.entries).forEach(name => {
       const description = this.entries[name].description;
       this.descriptionIndex[description] = name;
@@ -82,7 +78,6 @@ class GuestBook {
   }
   
   getNameByDescription(description) {
-    // O(1) lookup using the description index
     return this.descriptionIndex[description] || null;
   }
   
@@ -106,15 +101,6 @@ class GuestBook {
     
     return activeEntries;
   }
-  
-  getEntry(name) {
-    return this.entries[name] || null;
-  }
-  
-  getRemainingGhostsCount() {
-    return Object.values(this.entries).filter(entry => !entry.disappeared).length;
-  }
 }
 
-// Create a global instance of the guest book
 window.guestBook = new GuestBook();

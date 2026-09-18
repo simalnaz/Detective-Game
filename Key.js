@@ -18,11 +18,11 @@ class Key extends GameObject {
     }
   
     update() {
-      // No movement or complex animation needed for keys
+      
     }
   
     collect() {
       this.isCollected = true;
-      return this.id; // Make sure this is the descriptive name
+      return this.id; 
     }    
   }

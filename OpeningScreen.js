@@ -1,5 +1,3 @@
-// OpeningScreen.js - Fixed version with original styling
-
 class OpeningScreen {
   constructor() {
     this.element = null;
@@ -51,12 +49,10 @@ this.element.appendChild(wrapper);
       console.log("Start button clicked!");
       this.element.classList.add("fade-out");
       setTimeout(() => {
-        this.close(this.startCallback); // ✅ Call the game-start callback after closing
-      }, 1000); // Match fade-out duration
+        this.close(this.startCallback); 
+      }, 1000); 
     });
     
-
-    // Ensure the opening screen appears on top of everything
     this.element.style.zIndex = "9999";
 
     return this.element;
@@ -64,7 +60,7 @@ this.element.appendChild(wrapper);
   
   mount(container) {
     console.log("Mounting opening screen to container");
-    // Hide any existing game canvas to avoid conflicts
+
     const gameCanvas = container.querySelector(".game-canvas");
     if (gameCanvas) {
       console.log("Temporarily hiding game canvas");
@@ -87,7 +83,7 @@ this.element.appendChild(wrapper);
       this.element.parentElement.removeChild(this.element);
     }
   
-    // Restore the game canvas
+
     const container = document.querySelector(".game-container");
     if (container) {
       const gameCanvas = container.querySelector(".game-canvas");
@@ -97,14 +93,13 @@ this.element.appendChild(wrapper);
       }
     }
   
-    // 🔁 Call the callback after closing
+ 
     if (callback) {
       callback();
     }
   }  
 }
 
-// Add CSS to document to ensure the opening screen styles are applied
 document.addEventListener("DOMContentLoaded", function() {
   // Only add styles if they don't already exist
   if (!document.getElementById("opening-screen-styles")) {

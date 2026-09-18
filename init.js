@@ -1,7 +1,5 @@
-// Initialize the opening screen
 const openingScreen = new OpeningScreen();
 
-// Setup what happens when "Start" is clicked
 openingScreen.onStart(() => {
 startGame();
 });
@@ -9,57 +7,6 @@ function startGame() {
   console.log("Opening screen 'Start' clicked. Initializing game...");
 
   try {
-    const ghosts = [
-      new GhostName({
-        x: utils.withGrid(10),
-        y: utils.withGrid(7),
-        src: "/images/characters/people/npc4.png",
-        rememberedDetail: "bakes lemon cake",
-        id: "ghost1",
-      }),
-      new GhostName({
-        x: utils.withGrid(2),
-        y: utils.withGrid(3),
-        src: "/images/characters/people/elliot.png",
-        rememberedDetail: "carries a golden pocket watch",
-        id: "ghost2",
-      }),
-      new GhostName({
-        x: utils.withGrid(12),
-        y: utils.withGrid(10),
-        src: "/images/characters/people/npc2.png",
-        rememberedDetail: "plays the violin at midnight",
-        id: "ghost3",
-      }),
-      new GhostName({
-        x: utils.withGrid(5),
-        y: utils.withGrid(5),
-        src: "/images/characters/people/thomas.png",
-        rememberedDetail: "49th of anniversary with his wife",
-        id: "ghost4",
-      }),
-      new GhostName({
-        x: utils.withGrid(29),
-        y: utils.withGrid(42),
-        src: "/images/characters/people/eleanor.png",
-        rememberedDetail: "dedicated her life to love",
-        id: "ghost5",
-      }),
-      new GhostName({
-        x: utils.withGrid(11),
-        y: utils.withGrid(27),
-        src: "/images/characters/people/reginald.png",
-        rememberedDetail: "complains, every day, every second",
-        id: "ghost6",
-      }),
-      new GhostName({
-        x: utils.withGrid(4),
-        y: utils.withGrid(12),
-        src: "/images/characters/people/marilyn.png",
-        rememberedDetail: "sees the world black and white",
-        id: "ghost7",
-      }),
-    ];
 
     const overworld = new Overworld({
       element: document.querySelector(".game-container"),
@@ -125,29 +72,6 @@ function startGame() {
       if (letterIcon) {
         letterIcon.addEventListener("click", handleLetterClick);
       }
-
-      document.addEventListener("keydown", (e) => {
-        if (e.key === "L" && window.overworld) {
-          overworld.startMap(window.OverworldMaps.HauntedLobby);
-        }
-        if (e.key === "P") {
-          utils.gameProgress.chapter1Completed = true;
-          utils.gameProgress.chapter2Completed = true;
-          utils.gameProgress.chapter3Completed = true;
-          alert("All chapters marked as complete!");
-          if (window.notebookMenu?.element?.classList.contains('visible')) {
-            window.notebookMenu.renderTab(window.notebookMenu.activeTab);
-          }
-        }
-        if (e.key === "K") {
-          window.elliotShouldFade = true;
-          utils.gameProgress.chapter1Completed = true;
-          utils.keyCollection.keysFound = ["Iron Master Key", "Silver Room Key", "Gold Safe Key"];
-          alert("Chapter 1 complete cheat activated");
-          if (window.keyArrayDisplay) window.keyArrayDisplay.refresh();
-        }
-      });
-
     });
 
   } catch (error) {
@@ -155,6 +79,5 @@ function startGame() {
   }
 }
 
-// Mount the opening screen
 openingScreen.mount(document.querySelector(".game-container"));
 console.log("Opening screen mounted. Waiting for player to click Start...");

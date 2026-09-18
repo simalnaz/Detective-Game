@@ -97,7 +97,6 @@ class InventoryMenu {
           itemElement.classList.add("selected");
         }
         
-        // Create icon element
         const iconElement = document.createElement("div");
         iconElement.classList.add("InventoryMenu_icon");
         
@@ -127,7 +126,6 @@ class InventoryMenu {
         this.inventoryListElement.appendChild(itemElement);
       }
   
-      // Update details panel
       this.updateItemDetails();
     }
   
@@ -142,17 +140,14 @@ class InventoryMenu {
       
       const selectedItem = items[this.selectedIndex];
       
-      // Update description
       this.descriptionElement.innerHTML = `
         <h3>${selectedItem.name || selectedItem.id}</h3>
         <p>${selectedItem.description || ""}</p>
       `;
-      
-      // Update image
       if (selectedItem.icon) {
         this.imageElement.style.backgroundImage = `url(${selectedItem.icon})`;
       } else {
-        // Default image based on item type
+      
         this.imageElement.style.backgroundImage = "";
         this.imageElement.classList.add(`icon-${selectedItem.type || 'default'}`);
       }
@@ -236,7 +231,7 @@ class InventoryMenu {
       container.appendChild(this.element);
       this.updateInventoryList();
   
-      // Setup keyboard controls
+
       this.keyDownHandler = this.handleKeyDown.bind(this);
       document.addEventListener("keydown", this.keyDownHandler);
     }

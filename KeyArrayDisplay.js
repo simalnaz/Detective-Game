@@ -1,4 +1,3 @@
-// KeyArrayDisplay.js
 class KeyArrayDisplay {
     constructor(containerId = "key-array") {
       this.containerId = containerId;
@@ -29,7 +28,7 @@ class KeyArrayDisplay {
       const content = document.createElement("div");
       content.classList.add("key-content");
       if (value) {
-        // Look up the key's icon from inventory
+       
         const item = window.playerInventory.items.find(i => i.id === value);
         if (item && item.icon) {
           const img = document.createElement("img");

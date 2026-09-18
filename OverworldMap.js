@@ -1,16 +1,11 @@
-// /Users/simal/Desktop/Detective/OverworldMap.js
-// REMOVED: this.walls = config.walls || {}; from constructor
-// REMOVED: addWall, removeWall, moveWall methods entirely
-// REMOVED: this.removeWall(...) from checkForActionCutscene
-// REMOVED: walls: { ... } blocks from all map definitions in window.OverworldMaps
 
 class OverworldMap {
   constructor(config) {
     this.overworld = null;
     this.gameObjects = config.gameObjects;
     this.cutsceneSpaces = config.cutsceneSpaces || {};
-    // this.walls = config.walls || {}; // <-- REMOVED: Collision mask handles this now
-    this.walls = {}; // Initialize as empty, will be populated by loadCollisionMask
+    
+    this.walls = {}; 
 
     this.config = config;
 
@@ -44,46 +39,41 @@ class OverworldMap {
         const canvas = document.createElement("canvas");
         canvas.width = image.width;
         canvas.height = image.height;
-        const ctx = canvas.getContext("2d", { willReadFrequently: true }); // Optimization hint
+        const ctx = canvas.getContext("2d", { willReadFrequently: true }); 
         ctx.drawImage(image, 0, 0);
 
         try {
           const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
           let wallCount = 0;
 
-          let collisionOffsetX = 0; // Always 0 now
-          let collisionOffsetY = 0; // Default to 0
+          let collisionOffsetX = 0; 
+          let collisionOffsetY = 0; 
 
-          // Check if this is the Lobby map based on its collision mask source
-          // Make sure this path exactly matches the one in window.OverworldMaps.Lobby
+          
           if (this.config.collisionMaskSrc === "/images/maps/LobbyLowerCollisionMask.png") {
             console.log("Applying Lobby-specific DOWNWARD collision offset.");
-            // Apply ONLY the downward offset for the Lobby map
-            // collisionOffsetX remains 0
+      
             collisionOffsetX = 3;
-            collisionOffsetY = -10; // Shift collision 1 grid unit (16px) DOWN
+            collisionOffsetY = -10; 
           }
 
           if (this.config.collisionMaskSrc === "/images/maps/Lobby2CollisionMask.png") {
             console.log("Applying Lobby-specific DOWNWARD collision offset.");
-            // Apply ONLY the downward offset for the Lobby map
-            // collisionOffsetX remains 0
+      
             collisionOffsetX = 1;
-            collisionOffsetY = 1; // Shift collision 1 grid unit (16px) DOWN
+            collisionOffsetY = 1; 
           }
 
           for (let y = 0; y < canvas.height; y++) {
             for (let x = 0; x < canvas.width; x++) {
 
-              // Calculate grid coordinates where the wall will be placed, applying offsets
-              // collisionOffsetX will be 0 for all maps
-              // collisionOffsetY will be 1 for Lobby, 0 otherwise
+     
               const gridX = utils.withGrid(x + collisionOffsetX);
               const gridY = utils.withGrid(y + collisionOffsetY);
 
               // Sample the center of the grid cell in the mask image
-              const maskPixelX = x * 16 + 8; // Sample center X (Keep sampling based on original x)
-              const maskPixelY = y * 16 + 8; // Sample center Y (Keep sampling based on original y)
+              const maskPixelX = x * 16 + 8; 
+              const maskPixelY = y * 16 + 8; 
 
               // Ensure sample coordinates are within image bounds
               if (maskPixelX < image.width && maskPixelY < image.height) {
@@ -94,9 +84,9 @@ class OverworldMap {
 
                 // Red pixel (allow some tolerance for anti-aliasing/compression)
                 if (r > 200 && g < 50 && b < 50) {
-                  // Place the wall at the OFFSET grid coordinate
-                  const key = `${gridX},${gridY}`; // <-- USES OFFSET gridX
-                  this.walls[key] = true; // <-- KEPT: Populates walls from mask
+                 
+                  const key = `${gridX},${gridY}`; 
+                  this.walls[key] = true; 
                   wallCount++;
                 }
               }
@@ -105,30 +95,29 @@ class OverworldMap {
           console.log(`Added ${wallCount} walls from collision mask.`);
         } catch (e) {
           console.error("Error processing collision mask:", e);
-          // Potentially handle CORS issues if loading from different origin
+      
           if (e.name === 'SecurityError') {
             console.error("Could not read pixel data. Ensure the collision mask image is served from the same origin or has appropriate CORS headers.");
           }
         }
-        resolve(); // Resolve the promise once done
+        resolve(); 
       };
 
       image.onerror = () => {
         console.error(`Failed to load collision mask image: ${this.config.collisionMaskSrc}`);
-        resolve(); // Resolve even on error so loading doesn't hang
+        resolve(); 
       };
     });
   }
-  // --- END OF NEW METHOD ---
+  
 
-  // MODIFIED waitForLoad to include collision mask loading
   waitForLoad() {
     const lowerPromise = new Promise(resolve => {
       if (this.lowerImage.complete) { resolve(); return; }
       this.lowerImage.onload = resolve;
       this.lowerImage.onerror = () => {
         console.error(`Failed to load lower image: ${this.lowerImage.src}`);
-        resolve(); // Resolve on error
+        resolve(); 
       };
     });
 
@@ -137,12 +126,12 @@ class OverworldMap {
       this.upperImage.onload = resolve;
       this.upperImage.onerror = () => {
         console.error(`Failed to load upper image: ${this.upperImage.src}`);
-        resolve(); // Resolve on error
+        resolve(); 
       };
     });
 
-    // Add the collision mask loading promise
-    const collisionMaskPromise = this.loadCollisionMask(); // <-- CALL THE NEW METHOD
+   
+    const collisionMaskPromise = this.loadCollisionMask(); 
 
     // Wait for ALL promises (lower, upper, collision mask) to resolve
     return Promise.all([lowerPromise, upperPromise, collisionMaskPromise]).then(() => {
@@ -151,7 +140,7 @@ class OverworldMap {
       // No need to resolve explicitly here, Promise.all handles it.
     }).catch(error => {
       console.error("Error during map asset loading:", error);
-      // Still might want to mark as loaded or handle error state
+     
       this.isLoaded = true; // Or false depending on desired behavior on error
     });
   }
@@ -172,12 +161,11 @@ class OverworldMap {
         utils.withGrid(6) - cameraPerson.y
       );
     } else {
-      // Optional: Draw a placeholder or log if trying to draw unloaded upper image
-      // console.warn("Attempted to draw unloaded upper map image.");
+
     }
   }
 
-  // KEPT: This method now checks against the walls populated by loadCollisionMask
+  
   isSpaceTaken(currentX, currentY, direction) {
     const { x, y } = utils.nextPosition(currentX, currentY, direction);
     return this.walls[`${x},${y}`] || false;
@@ -187,8 +175,8 @@ class OverworldMap {
     Object.keys(this.gameObjects).forEach(key => {
 
       let object = this.gameObjects[key];
-      object.mapId = key;        // ✅ use this for logic like teleports
-      object.id = object.id || key; // ✅ use this only if .id wasn't already defined
+      object.mapId = key;        
+      object.id = object.id || key; 
 
 
       //TODO: determine if this object should actually mount
@@ -208,14 +196,6 @@ class OverworldMap {
       })
       await eventHandler.init();
     }
-
-    //if (event.type === "centerText") {
-    //const centerText = new CenterTextDisplay({
-    //text: event.text,
-    //duration: event.duration || 3000
-    //});
-    //centerText.init(resolve);
-    //}
 
     this.isCutscenePlaying = false;
 
@@ -268,7 +248,7 @@ class OverworldMap {
           { type: "textMessage", text: remainingText }
         ]);
 
-        // Find the object key so we can delete it
+    
         const objectKey = Object.keys(this.gameObjects).find(k => this.gameObjects[k] === match);
         if (objectKey) {
           delete this.gameObjects[objectKey];
@@ -309,9 +289,8 @@ class OverworldMap {
     if (match instanceof GhostName) {
       match.updateTalking();
       if (match.hasBeenIdentified) {
-        // Optional: Show message for identified ghost
-        // this.startCutscene([{ type: "textMessage", text: `${match.realName} seems at peace.` }]);
-        return; // Do nothing or show simple message
+   
+        return; 
       }
       // If not identified, start the guessing process (uses static events from updateTalking)
       if (match.talking && match.talking.length > 0) {
@@ -336,8 +315,7 @@ class OverworldMap {
       if (Array.isArray(eventsToRun) && eventsToRun.length > 0) {
         this.startCutscene(eventsToRun);
       } else {
-        // Optional: Log if the function didn't return events or config was bad
-        // Check if the original config was a function but didn't return a valid array
+
         if (typeof match.talking[0].events[0] === 'function') {
           console.warn(`Function-based talking config for ${match.id || match.mapId} did not return a valid event array.`);
         } else if (!Array.isArray(eventsToRun) || eventsToRun.length === 0) {
@@ -346,8 +324,7 @@ class OverworldMap {
       }
       // No return needed here if it's the last interaction type checked
     }
-    // --- ADDED: Book Deletion Logic ---
-    // If the interacted object was the guest book, remove it after interaction
+
     if (match instanceof Book && match.id === "guestBook") {
       console.log(`[OverworldMap] Interacted with guestBook (${match.id}). Removing it.`);
       // Find the object key so we can delete it
@@ -360,7 +337,7 @@ class OverworldMap {
       }
       // No need to remove wall as wall logic is separate now
     }
-    // --- END: Book Deletion Logic ---
+
   }
 
   checkForFootstepCutscene() {
@@ -377,21 +354,18 @@ class OverworldMap {
       // Check if the first element is a function (indicating conditional logic)
       if (typeof eventsToRun[0] === 'function') {
         // Execute the function, passing 'this' (the map instance)
-        eventsToRun = eventsToRun[0](this); // <-- CORRECT
+        eventsToRun = eventsToRun[0](this); 
 
       }
 
-      // Ensure we actually got an array of events back before starting
-      // (The function might return null or an empty array in some cases)
+  
       if (Array.isArray(eventsToRun) && eventsToRun.length > 0) {
         this.startCutscene(eventsToRun);
       } else if (typeof eventsToRun[0] !== 'function') {
-        // If it wasn't a function initially, and it's not a valid array now, log a warning.
-        // This handles cases where the config might be malformed but wasn't a function.
+       
         console.warn(`Cutscene configuration at ${coord} is not a function and did not resolve to a valid event array.`);
       }
-      // If it was a function but returned an empty array or null, we just don't start a cutscene, which is fine.
-    }
+       }
   }
 
   addWall(x, y) {

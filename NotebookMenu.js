@@ -30,16 +30,16 @@ class NotebookMenu {
 
     this.tabs.forEach(tab => {
       tab.addEventListener("click", () => {
-        // Remove active class from all tabs
+    
         this.tabs.forEach(t => t.classList.remove("active"));
-        // Add active class to clicked tab
+      
         tab.classList.add("active");
-        // Render the tab content
+     
         this.renderTab(tab.dataset.tab);
       });
     });
 
-    // Add close button
+   
     const closeButton = document.createElement("button");
     closeButton.classList.add("NotebookMenu_close");
     closeButton.innerHTML = "X"; // Kept the 'X' as it's standard UI
@@ -90,15 +90,15 @@ class NotebookMenu {
         <h3>Chapter Status</h3>
         <div class="chapter-status">
           <div class="chapter-item ${utils.gameProgress.chapter1Completed ? 'completed' : ''}">
-            <span class="chapter-icon"></span> <!-- Removed symbol -->
+            <span class="chapter-icon"></span> 
             <span class="chapter-name">Chapter 1: Arrays</span>
           </div>
           <div class="chapter-item ${utils.gameProgress.chapter2Completed ? 'completed' : ''}">
-            <span class="chapter-icon"></span> <!-- Removed symbol -->
+            <span class="chapter-icon"></span> 
             <span class="chapter-name">Chapter 2: Hash Maps</span>
           </div>
           <div class="chapter-item ${utils.gameProgress.chapter3Completed ? 'completed' : ''}">
-            <span class="chapter-icon"></span> <!-- Removed symbol -->
+            <span class="chapter-icon"></span> 
             <span class="chapter-name">Chapter 3: Linked Lists</span>
           </div>
         </div>
@@ -112,7 +112,6 @@ class NotebookMenu {
     `;
   }
 
-// Replace the renderGhostsTab method in NotebookMenu.js with this enhanced version
 renderGhostsTab() {
   const active = window.guestBook.getAllActiveEntries();
   const all = Object.keys(window.guestBook.entries);
@@ -173,9 +172,9 @@ renderGhostsTab() {
         
         <div class="chapter-accordion">
           <div class="chapter-header" data-chapter="chapter1">
-            <span class="chapter-toggle">${this.subSections.chapter1 ? 'v' : '>'}</span> <!-- Changed symbols -->
+            <span class="chapter-toggle">${this.subSections.chapter1 ? 'v' : '>'}</span> 
             <span class="chapter-title">Chapter 1: Arrays</span>
-            <span class="chapter-status">${utils.gameProgress.chapter1Completed ? "Completed" : "In Progress"}</span> <!-- Removed symbol -->
+            <span class="chapter-status">${utils.gameProgress.chapter1Completed ? "Completed" : "In Progress"}</span> 
           </div>
           <div class="chapter-content ${this.subSections.chapter1 ? 'expanded' : ''}">
             <div class="chapter-description">
@@ -215,9 +214,9 @@ renderGhostsTab() {
           </div>
           
           <div class="chapter-header" data-chapter="chapter2">
-            <span class="chapter-toggle">${this.subSections.chapter2 ? 'v' : '>'}</span> <!-- Changed symbols -->
+            <span class="chapter-toggle">${this.subSections.chapter2 ? 'v' : '>'}</span> 
             <span class="chapter-title">Chapter 2: Hash Maps</span>
-            <span class="chapter-status">${utils.gameProgress.chapter2Completed ? "Completed" : "In Progress"}</span> <!-- Removed symbol -->
+            <span class="chapter-status">${utils.gameProgress.chapter2Completed ? "Completed" : "In Progress"}</span> 
           </div>
           <div class="chapter-content ${this.subSections.chapter2 ? 'expanded' : ''}">
             <div class="chapter-description">
@@ -257,9 +256,9 @@ renderGhostsTab() {
           </div>
           
           <div class="chapter-header" data-chapter="chapter3">
-            <span class="chapter-toggle">${this.subSections.chapter3 ? 'v' : '>'}</span> <!-- Changed symbols -->
+            <span class="chapter-toggle">${this.subSections.chapter3 ? 'v' : '>'}</span> <
             <span class="chapter-title">Chapter 3: Linked Lists</span>
-            <span class="chapter-status">${utils.gameProgress.chapter3Completed ? "Completed" : "In Progress"}</span> <!-- Removed symbol -->
+            <span class="chapter-status">${utils.gameProgress.chapter3Completed ? "Completed" : "In Progress"}</span> 
           </div>
           <div class="chapter-content ${this.subSections.chapter3 ? 'expanded' : ''}">
             <div class="chapter-description">
@@ -311,28 +310,6 @@ renderGhostsTab() {
       });
     });
   }
-
-  // Helper method to get ghost details using the actual guest book data
-  getGhostDetail(name) {
-      // Access the global guest book instance
-      const guestBook = window.guestBook;
-
-      // Check if the guest book and its entries exist
-      if (guestBook && guestBook.entries) {
-        // Look up the entry by name
-        const entry = guestBook.entries[name];
-
-        // If the entry exists and has a description, return it
-        if (entry && entry.description) {
-          // Return the description (which is the remembered detail)
-          return entry.description;
-        }
-      }
-      // Fallback if the name or detail isn't found in the guest book
-      // This might happen if the name passed is somehow invalid
-      return "Detail unknown";
-    }
-
 
   toggle() {
     this.element.classList.toggle("visible");

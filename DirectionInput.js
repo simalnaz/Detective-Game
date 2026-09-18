@@ -39,10 +39,8 @@ class DirectionInput {
             if (item.onUse) {
               const result = item.onUse();
               if (result && result.message) {
-                // Close the inventory first
                 inventoryMenu.close();
-                
-                // Show the result message
+
                 const message = new TextMessage({
                   text: result.message,
                   onComplete: () => {
